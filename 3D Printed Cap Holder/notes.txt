@@ -1,0 +1,4 @@
+These are the 3D printed parts for holding the LED Board on my cap, along with the light diffuser.
+This design has been printed and tested successfully on a MakerBot Replicator Dual, using PLA.
+It utilizes 8 10mm M3 Socket Cap bolts (McMaster Part: 91292A113)
+It utilizes 8 M3 nuts (McMaster Part: 90592A009)
