@@ -16,3 +16,5 @@ mobile site
 These are the files that power the www.controlmycap.com mobile site.  It uses Jquery Mobile UI, as well as the JQuery MiniColors Plugin.
 http://jquerymobile.com/
 https://github.com/claviska/jquery-miniColors
+
+Note, to use this, you will need to rename 'sample_config.py' in the cgi-bin to 'config.py' and set the variables to the information for your MySQL Schema.
