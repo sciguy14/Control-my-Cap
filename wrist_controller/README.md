@@ -9,8 +9,9 @@ Usage Notes
 * Rename 'sample_config.py' to 'config.py' and set the variables to the information for your MySQL Schema.  
 * Make sure the `pi` user has access to the i2c bus.  By default, you must be `root`. To do this, run: `sudo adduser pi i2c`. You will need to logout and login for this to take effect.
 * `/etc/rc.local` is used to initialize the system at boot.  Add the following code to `/etc/rc.local` before `exit 0` (You need to be `root` to edit this file):  
-    #Disable RTS for USB0 Serial Device, if successful, start program  
-    (stty -F /dev/ttyUSB0 -hup && /home/pi/cap/cap.py) || /home/pi/cap/fail.py  
+
+        #Disable RTS for USB0 Serial Device, if successful, start program  
+        (stty -F /dev/ttyUSB0 -hup && /home/pi/cap/cap.py) || /home/pi/cap/fail.py  
 This will disable RTS on the USB Serial line (This prevents the cap circuit board from reseting everytime the pySerial objects connnects). If that succeeds, the main control program is started. Otherwise, the failure is indicated by the fail script.
 
 Necessary Packages
