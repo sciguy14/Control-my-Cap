@@ -16,6 +16,6 @@ You should have on MySQL database table setup as follows:
 
 Useful Links & Resources
 ------------------------
-* (JQuery Mobile)[http://jquerymobile.com/]
-* (JQUery MiniColors)[https://github.com/claviska/jquery-miniColors]
-* (Python MySQLdb)[http://sourceforge.net/projects/mysql-python/]
+* [JQuery Mobile](http://jquerymobile.com/)
+* [JQUery MiniColors](https://github.com/claviska/jquery-miniColors)
+* [Python MySQLdb](http://sourceforge.net/projects/mysql-python/)
