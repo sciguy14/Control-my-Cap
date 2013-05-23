@@ -55,8 +55,8 @@ $(document).on('pageinit', function() {
 					status_title_text = "Success!";					
 				}
 				/* Put the results in a popup and show it. */
-				$('#status_title').text(status_title_text); 
-				$('#status_message').text(status_message_text);
+				$('#status_title').html(status_title_text); 
+				$('#status_message').html(status_message_text);
 				$('#reply').popup("open");
 			}
 		});
