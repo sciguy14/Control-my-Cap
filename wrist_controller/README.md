@@ -13,13 +13,14 @@ Usage Notes
         #Disable RTS for USB0 Serial Device, if successful, start program  
         (stty -F /dev/ttyUSB0 -hup && /home/pi/cap/cap.py) || /home/pi/cap/fail.py  
 This will disable RTS on the USB Serial line (This prevents the cap circuit board from reseting everytime the pySerial objects connnects). If that succeeds, the main control program is started. Otherwise, the failure is indicated by the fail script.
+* You will want the computer to automatically associate with a wifi network on boot. Follow [these instructions](http://www.geeked.info/raspberry-pi-add-multiple-wifi-access-points/) to install wpa-supplicant, run it in background mode at boot, and generate the pre-shared keys for your WPA-protected networks.
 
 Necessary Packages
 ------------------
 You will need to have the following packages installed.
 * [pySerial](http://pyserial.sourceforge.net/)
 * [Python MySQLdb](http://sourceforge.net/projects/mysql-python/)
-* [Adafruit Raspberry Pi Libraries](https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code] (Necessary files for I2C LCD Pi Plate Communications are already included here)
+* [Adafruit Raspberry Pi Libraries](https://github.com/adafruit/Adafruit-Raspberry-Pi-Python-Code) (Necessary files for I2C LCD Pi Plate Communications are already included here)
 * [Python Twitter Tools](http://mike.verdone.ca/twitter/)
 
 Attribution for Packaged Library Files

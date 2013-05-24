@@ -1,2 +1,3 @@
 mobile_site/cgi-bin/config.py
 wrist_controller/config.py
+wrist_controller/tests/*
