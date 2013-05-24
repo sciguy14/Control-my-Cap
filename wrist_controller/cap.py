@@ -9,7 +9,7 @@ from config import *
 from time import sleep
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from subprocess import check_output
-import socket
+import socket, os
 
 ####
 # FUNCTIONS
@@ -106,7 +106,56 @@ while looping:
     elif state == 'modeConfirm':
         test=True
     elif state == 'brightness':
-        test=True
+        brightness_screens =  [
+                                'Cap Brightness:\n#            10%',
+                                'Cap Brightness:\n##           20%',
+                                'Cap Brightness:\n###          30%',
+                                'Cap Brightness:\n####         40%',
+                                'Cap Brightness:\n#####        50%',
+                                'Cap Brightness:\n######       60%',
+                                'Cap Brightness:\n#######      70%',
+                                'Cap Brightness:\n########     80%',
+                                'Cap Brightness:\n#########    90%',
+                                'Cap Brightness:\n##########  100%',
+                            ]
+        # get current brightness setting from the local database
+        local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+        with local_conn:
+            cur = local_conn.cursor()
+            sqlstring = "SELECT `value` FROM config WHERE `option` = 'brightness'"
+            cur.execute(sqlstring)
+            brightness = int(cur.fetchone()[0])
+        local_conn.close()
+        lcd.clear
+        lcd.message(brightness_screens[(brightness/10)-1])
+        waiting = True
+        while waiting:
+            if lcd.buttonPressed(lcd.DOWN) and brightness > 10:
+                brightness = brightness - 10
+                local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+                with local_conn:
+                    cur = local_conn.cursor()
+                    sqlstring = "UPDATE config SET `value`=" + str(brightness) + " WHERE `option`='brightness'"
+                    cur.execute(sqlstring)
+                local_conn.close()
+                lcd.clear()
+                lcd.message(brightness_screens[(brightness/10)-1])
+                sleep(.3)
+            elif lcd.buttonPressed(lcd.UP) and brightness < 100:
+                brightness = brightness + 10
+                local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+                with local_conn:
+                    cur = local_conn.cursor()
+                    sqlstring = "UPDATE config SET `value`=" + str(brightness) + " WHERE `option`='brightness'"
+                    cur.execute(sqlstring)
+                local_conn.close()
+                lcd.clear()
+                lcd.message(brightness_screens[(brightness/10)-1])
+                sleep(.3)
+            elif lcd.buttonPressed(lcd.LEFT):
+                state = 'top'
+                waiting = False
+                sleep(.3)
     elif state == 'status':
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
