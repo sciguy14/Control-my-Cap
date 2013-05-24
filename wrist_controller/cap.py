@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Controls the cap!
+# Menu and Control Interface
 
 ####
 # IMPORT LIBRARIES AND CONFIGS
@@ -25,6 +25,46 @@ def update_menu(index_selected, num_items, menu_items):
         lcd.message('>' + menu_items[index_selected][1:])
     else:
         lcd.message(menu_items[index_selected-1] + '\n>' + menu_items[index_selected][1:])
+
+####
+# TABLES
+####
+
+top_menu =  [
+                ' Cap Mode',
+                ' Cap Brightness',
+                ' Toggle Bklight',
+                ' Status'
+            ]
+
+mode_menu = [
+                ' Web-Controlled',
+                ' Rainbow',
+                ' Red',
+                ' Green',
+                ' Blue',
+                ' White',
+                ' Teal',
+                ' Purple',
+                ' Orange',
+                ' Off'
+            ]
+
+
+
+brightness_screens =  [
+                        'Cap Brightness:\n#            10%',
+                        'Cap Brightness:\n##           20%',
+                        'Cap Brightness:\n###          30%',
+                        'Cap Brightness:\n####         40%',
+                        'Cap Brightness:\n#####        50%',
+                        'Cap Brightness:\n######       60%',
+                        'Cap Brightness:\n#######      70%',
+                        'Cap Brightness:\n########     80%',
+                        'Cap Brightness:\n#########    90%',
+                        'Cap Brightness:\n##########  100%',
+                      ]
+
 
 ####
 # MAIN PROGRAM
@@ -57,14 +97,7 @@ while looping:
     lcd.clear()
     sleep(.3)
     if  state == 'top':
-        top_menu =  [
-                        ' Cap Mode',
-                        ' Cap Brightness',
-                        ' Toggle Bklight',
-                        ' Status'
-                    ]
         top_menu_length = len(top_menu)
-        
         update_menu(top_menu_pointer, top_menu_length, top_menu) 
         waiting = True
         while waiting:
@@ -97,27 +130,55 @@ while looping:
                     waiting = False
     
     elif state == 'mode':
-        mode_menu_pointer = 0
-        mode_menu = [
-                        ' Pretty Colors',
-                        ' Web-Controlled'
-                    ]
+        # get current mode setting from the local database
+        local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+        with local_conn:
+            cur = local_conn.cursor()
+            sqlstring = "SELECT `value` FROM config WHERE `option` = 'mode'"
+            cur.execute(sqlstring)
+            sql_mode = int(cur.fetchone()[0])
+        local_conn.close()
+        mode_menu_pointer = sql_mode 
         mode_menu_length = len(mode_menu)
+        update_menu(mode_menu_pointer, mode_menu_length, mode_menu) 
+        waiting = True
+        while waiting:
+            if lcd.buttonPressed(lcd.UP) and mode_menu_pointer != 0:
+                mode_menu_pointer = mode_menu_pointer - 1
+                update_menu(mode_menu_pointer, mode_menu_length, mode_menu)
+                sleep(.3)
+            elif lcd.buttonPressed(lcd.DOWN) and mode_menu_pointer < mode_menu_length-1:
+                mode_menu_pointer = mode_menu_pointer + 1
+                update_menu(mode_menu_pointer, mode_menu_length, mode_menu)
+                sleep(.3)
+            elif lcd.buttonPressed(lcd.LEFT):
+                state = 'top'
+                waiting = False
+                sleep(.3)
+            elif lcd.buttonPressed(lcd.SELECT) or lcd.buttonPressed(lcd.RIGHT):
+                state = 'modeConfirm'
+                MODE = mode_menu_pointer
+                waiting = False
     elif state == 'modeConfirm':
-        test=True
+        lcd.message ('Setting Mode to:\n' + mode_menu[MODE][1:])
+        local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+        with local_conn:
+            cur = local_conn.cursor()
+            sqlstring = "UPDATE config SET `value`=" + str(MODE) + " WHERE `option`='mode'"
+            cur.execute(sqlstring)
+        local_conn.close()
+        lcd.clear()
+        lcd.message ('Mode set to:\n' + mode_menu[MODE][1:])
+        sleep(2)
+        lcd.clear()
+        lcd.message ('Press Select\nto go home.')
+        waiting = True
+        while waiting:
+            if lcd.buttonPressed(lcd.SELECT):
+                state = 'top'
+                waiting = False
+                sleep(.3)
     elif state == 'brightness':
-        brightness_screens =  [
-                                'Cap Brightness:\n#            10%',
-                                'Cap Brightness:\n##           20%',
-                                'Cap Brightness:\n###          30%',
-                                'Cap Brightness:\n####         40%',
-                                'Cap Brightness:\n#####        50%',
-                                'Cap Brightness:\n######       60%',
-                                'Cap Brightness:\n#######      70%',
-                                'Cap Brightness:\n########     80%',
-                                'Cap Brightness:\n#########    90%',
-                                'Cap Brightness:\n##########  100%',
-                            ]
         # get current brightness setting from the local database
         local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
         with local_conn:
@@ -157,15 +218,26 @@ while looping:
                 waiting = False
                 sleep(.3)
     elif state == 'status':
+        # get current mode setting from the local database
+        local_conn = mdb.connect(local_host, local_user, local_passwd, local_db)
+        with local_conn:
+            cur = local_conn.cursor()
+            sqlstring = "SELECT `value` FROM config WHERE `option` = 'mode'"
+            cur.execute(sqlstring)
+            sql_mode = int(cur.fetchone()[0])
+        local_conn.close()
+
+        #Get current IP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             s.connect(("1.2.3.4",9))	
             client = s.getsockname()[0]
-            lcd.message("Local IP:\n" + client)
         except socket.error:
-            lcd.message("Local IP:\nNULL")
+            client = "WiFi Down"
         finally:
             del s
+
+        lcd.message(mode_menu[sql_mode][1:] + '\n' + client)
         waiting = True
         while waiting:
             if lcd.buttonPressed(lcd.LEFT):
