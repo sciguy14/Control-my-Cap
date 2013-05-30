@@ -1,10 +1,14 @@
 $(document).ready(function() {
-	//Init popup.
+	//Init popups.
+	$('#done').popup();
 	$('#reply').popup();
 	$('#about').popup();
+	$("#hes_dead_jim").trigger("click");
 });
 
 $(document).on('pageinit', function() {
+
+	
 
 	$('.minicolors').minicolors({
 		animationSpeed: 100,

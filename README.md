@@ -1,7 +1,9 @@
 CONTROL MY CAP
 ==============
-
-These are the open design files for my "Control My Cap" project, which will enable crowd control of a high-intensity LED array mounted on my mortar board for my graduation from the Masters in Electrical and Computer Engineering Program at Cornell University.
+Learn more about this system on my website: http://www.jeremyblum.com/portfolio/control-my-cap  
+Watch a video demo of this system: http://www.youtube.com/watch?v=23_6IZ159EQ  
+  
+These are the open design files for my "Control My Cap" project, which enable crowd control of a high-intensity LED array mounted on my mortar board for my graduation from the Masters in Electrical and Computer Engineering Program at Cornell University.
   
 The system is setup as follows:  
 * A mobile-optimized website built using Jquery Mobile UI & a Python/MySQL backend sits on a cloud server.
