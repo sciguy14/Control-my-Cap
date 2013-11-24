@@ -6,8 +6,15 @@ Usage Notes
 -----------
 * I am running Linux Occidentalis v0.2 (It has I2C support already set-up).
 * Place all these files in `/home/pi/cap`.
+* Create a local MySQL database table called "config" with just two columns:
+    * option(Varchar 16)
+    * value (Varchar 16)
+* In the "config" table, create three entries and load them with the defaults:
+    * option = "brightness", value = "10"
+	* option = "mode", value = "9"
+	* option = "last_tweeted", value = "0"
 * Sign up for a Twitter Dev account, and [create an API app](https://dev.twitter.com/apps).  Give it read/write access and note the `Consumer Key` and the `Consumer Secret`.
-* Rename 'sample_config.py' to 'config.py' and set the variables to the information for your MySQL Schema. Se the key info for your Twitter App
+* Rename 'sample_config.py' to 'config.py' and set the variables to the information for your MySQL Schema. Set the key info for your Twitter App.
 * Make sure the `pi` user has access to the i2c bus.  By default, you must be `root`. To do this, run: `sudo adduser pi i2c`. You will need to logout and login for this to take effect.
 * You need to SSH into the wrist computer and run command.py one time to complete the steps for twitter OAuth authentication.  You only need to do this once.
 * `/etc/rc.local` is used to initialize the system at boot.  Add the following code to `/etc/rc.local` before `exit 0` (You need to be `root` to edit this file):  

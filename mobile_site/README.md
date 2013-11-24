@@ -6,7 +6,7 @@ Usage Notes
 -----------
 To use this, you will need to rename 'sample_config.py' in the cgi-bin to 'config.py' and set the variables to the information for your MySQL Schema.  
   
-You should have on MySQL database table setup as follows:
+You should have a MySQL database table setup as follows:
 * index (unsigned, autoincrementing & primary key)
 * time (MySQL timestamp default)
 * name (Varchar, Length 16)
